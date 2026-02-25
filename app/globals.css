@@ -1,0 +1,59 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,600;1,9..40,400&family=JetBrains+Mono:wght@400;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --cream: #F5F0E8;
+  --ink: #1A1208;
+  --red: #C0392B;
+  --gold: #D4A017;
+  --dark: #0D0D0D;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--dark);
+  color: var(--cream);
+  font-family: 'DM Sans', sans-serif;
+}
+
+.font-display {
+  font-family: 'Bebas Neue', cursive;
+}
+
+.font-mono {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Card flip animation */
+@keyframes dealIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) rotate(-1deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg);
+  }
+}
+
+.deal-in {
+  animation: dealIn 0.4s ease forwards;
+}
+
+/* Ticker animation */
+@keyframes ticker {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.ticker-track {
+  animation: ticker 30s linear infinite;
+  white-space: nowrap;
+  display: inline-flex;
+}
