@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { connectDB } from '@/lib/db/mongodb';
 import Game from '@/lib/models/Game';
 import Round from '@/lib/models/Round';
+import { Types } from 'mongoose';
 
 // GET /api/admin/cleanup
 // Marks active games as finished if their latest round's deadline has passed
@@ -16,7 +17,7 @@ export async function GET() {
     const timedOut: string[] = [];
 
     for (const g of activeGames) {
-      const latestRound = await Round.findOne({ gameId: g._id.toString() })
+      const latestRound = await Round.findOne({ gameId: (g._id as Types.ObjectId).toString() })
         .sort({ createdAt: -1 })
         .lean() as any;
 
@@ -25,12 +26,12 @@ export async function GET() {
         latestRound.status !== 'scored' &&
         new Date(latestRound.deadline) < new Date()
       ) {
-        await Game.findByIdAndUpdate(g._id, {
+        await Game.findByIdAndUpdate(g._id as Types.ObjectId, {
           status: 'finished',
           finishedAt: new Date(),
           // winnerId / winnerName intentionally left null — timed-out game
         });
-        timedOut.push(g._id.toString());
+        timedOut.push((g._id as Types.ObjectId).toString());
       }
     }
 
