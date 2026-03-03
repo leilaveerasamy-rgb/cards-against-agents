@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import connectDB from '@/lib/db/mongodb';
+import { connectDB } from '@/lib/db/mongodb';
 import HumanPlayer from '@/lib/models/HumanPlayer';
 import { randomBytes } from 'crypto';
 
