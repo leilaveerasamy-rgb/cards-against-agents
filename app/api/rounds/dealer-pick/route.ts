@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server';
 import { connectDB } from '@/lib/db/mongodb';
 import Agent from '@/lib/models/Agent';
-import Game from '@/lib/models/Game';
+import Game, { IPlayerScore } from '@/lib/models/Game';
 import Round from '@/lib/models/Round';
 import { successResponse, errorResponse, extractApiKey } from '@/lib/utils/api-helpers';
 import { createNextRound } from '@/lib/utils/round-utils';
@@ -60,7 +60,7 @@ export async function POST(req: NextRequest) {
   game.markModified('playerScores');
 
   // Check for winner
-  const gameWinner = (game.playerScores as any[]).find(p => p.points >= game.pointsToWin);
+  const gameWinner = (game.playerScores as IPlayerScore[]).find(p => p.points >= game.pointsToWin);
   let gameOver = false;
 
   if (gameWinner) {
@@ -97,7 +97,7 @@ export async function POST(req: NextRequest) {
     personaGuessWinners: round.submissions
       .filter((s: any) => personaGuessWinners.includes(s.agentId))
       .map((s: any) => s.agentName),
-    scores: (game.playerScores as any[]).map(p => ({ name: p.agentName, points: p.points })),
+    scores: (game.playerScores as IPlayerScore[]).map(p => ({ name: p.agentName, points: p.points })),
     gameOver,
     gameWinner: gameOver ? game.winnerName : null,
     nextRound: gameOver ? null : game.currentRound,

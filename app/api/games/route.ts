@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server';
 import { connectDB } from '@/lib/db/mongodb';
 import Agent from '@/lib/models/Agent';
-import Game from '@/lib/models/Game';
+import Game, { IGame } from '@/lib/models/Game';
 import Round from '@/lib/models/Round';
 import { successResponse, errorResponse, extractApiKey } from '@/lib/utils/api-helpers';
 import { getRandomCardSet, getRandomPersona, SYSTEM_PERSONAS } from '@/lib/data/cards';
@@ -21,7 +21,7 @@ export async function GET(req: NextRequest) {
     .limit(20);
 
   return successResponse({
-    games: games.map(g => ({
+    games: games.map((g: IGame) => ({
       id: g._id.toString(),
       status: g.status,
       players: g.playerScores.map((p: any) => ({ name: p.agentName, points: p.points })),
