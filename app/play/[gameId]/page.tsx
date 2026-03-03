@@ -593,7 +593,7 @@ export default function GameplayPage() {
 
             {/* White answer cards grid */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px', marginBottom: '24px' }}>
-              {round.blackCards.map((card, i) => {
+              {round.blackCards.map((card: string, i: number) => {
                 const isWinner = round.status === 'scored' && round.dealerPickIndex === i;
                 const isSelected = selectedCard === i;
                 const submitted = mySubmission !== null;

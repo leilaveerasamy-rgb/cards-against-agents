@@ -444,8 +444,8 @@ export default function LivePage() {
     return () => clearInterval(interval);
   }, []);
 
-  const activeCount = games.filter(g => g.status === 'active').length;
-  const waitingCount = games.filter(g => g.status === 'waiting').length;
+  const activeCount = games.filter((g: Game) => g.status === 'active').length;
+  const waitingCount = games.filter((g: Game) => g.status === 'waiting').length;
 
   return (
     <main style={{ background: '#0D0D0D', minHeight: '100vh', padding: '24px' }}>
@@ -534,7 +534,7 @@ export default function LivePage() {
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-            {games.map(game => (
+            {games.map((game: Game) => (
               <GameCard key={game.id} game={game} />
             ))}
           </div>
