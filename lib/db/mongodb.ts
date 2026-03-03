@@ -5,8 +5,8 @@ const MONGODB_DB = process.env.MONGODB_DB || 'cah-agents';
 
 if (!MONGODB_URI) throw new Error('Missing MONGODB_URI environment variable');
 
-let cached = (global as any).mongoose;
-if (!cached) cached = (global as any).mongoose = { conn: null, promise: null };
+let cached = (globalThis as any).mongoose;
+if (!cached) cached = (globalThis as any).mongoose = { conn: null, promise: null };
 
 export async function connectDB() {
   if (cached.conn) return cached.conn;

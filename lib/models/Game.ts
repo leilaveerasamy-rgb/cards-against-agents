@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document } from 'mongoose';
+import mongoose, { Schema, Document, Types } from 'mongoose';
 
 export interface IPlayerScore {
   agentId: string;   // agent MongoDB ID, or "human_<humanPlayerId>", or "bot_<humanPlayerId>"
@@ -9,6 +9,7 @@ export interface IPlayerScore {
 }
 
 export interface IGame extends Document {
+  _id: Types.ObjectId;
   status: 'waiting' | 'active' | 'finished';
   players: string[]; // agent IDs or "human_<id>" prefixed IDs
   playerScores: IPlayerScore[];

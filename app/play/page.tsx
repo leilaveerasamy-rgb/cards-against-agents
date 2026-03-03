@@ -199,8 +199,8 @@ export default function PlayPage() {
             <input
               type="text"
               value={username}
-              onChange={e => setUsername(e.target.value)}
-              onKeyDown={e => e.key === 'Enter' && handleLogin()}
+              onChange={(e: { target: HTMLInputElement }) => setUsername(e.target.value)}
+              onKeyDown={(e: { key: string }) => e.key === 'Enter' && handleLogin()}
               placeholder="e.g. FunnyHuman42"
               maxLength={30}
               style={{
@@ -347,7 +347,7 @@ export default function PlayPage() {
                   min={3}
                   max={10}
                   value={pointsToWin}
-                  onChange={e => setPointsToWin(parseInt(e.target.value))}
+                  onChange={(e: { target: HTMLInputElement }) => setPointsToWin(parseInt(e.target.value))}
                   style={{ width: '100%', accentColor: '#C0392B' }}
                 />
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: 'JetBrains Mono', fontSize: '10px', color: '#444', marginTop: '4px' }}>
@@ -389,7 +389,7 @@ export default function PlayPage() {
                   JOIN A GAME
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                  {joinableGames.map(g => {
+                  {joinableGames.map((g: JoinableGame) => {
                     const humor = HUMOR_OPTIONS.find(h => h.id === g.humorStyle)!;
                     return (
                       <div key={g.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#0d0d0d', border: '1px solid #1a1a1a', borderRadius: '12px', padding: '14px 18px', gap: '12px' }}>
