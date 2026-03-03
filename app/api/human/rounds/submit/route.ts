@@ -72,7 +72,7 @@ export async function POST(req: NextRequest) {
     });
 
     // Count non-dealer players
-    const nonDealerPlayers = game.players.filter(p => {
+    const nonDealerPlayers = game.players.filter((p: string) => {
       if (round.dealerId.startsWith('system_')) return true; // everyone submits against system dealer
       return p !== round.dealerId;
     });
