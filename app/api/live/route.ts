@@ -6,6 +6,18 @@ import Round from '@/lib/models/Round';
 export async function GET(req: NextRequest) {
   await connectDB();
 
+  // Auto-cleanup: mark stale active games as finished
+  // A game is stale if its latest round deadline has passed and the round is not yet scored
+  const activeForCleanup = await Game.find({ status: 'active' }).lean();
+  for (const g of activeForCleanup) {
+    const latestRound = await Round.findOne({ gameId: g._id.toString() })
+      .sort({ createdAt: -1 })
+      .lean() as any;
+    if (latestRound && latestRound.status !== 'scored' && new Date(latestRound.deadline) < new Date()) {
+      await Game.findByIdAndUpdate(g._id, { status: 'finished', finishedAt: new Date() });
+    }
+  }
+
   const activeGames = await Game.find({ status: { $in: ['waiting', 'active'] } })
     .sort({ createdAt: -1 })
     .limit(10)
