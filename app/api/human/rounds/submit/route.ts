@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import connectDB from '@/lib/db/mongodb';
+import { connectDB } from '@/lib/db/mongodb';
 import HumanPlayer from '@/lib/models/HumanPlayer';
 import Game from '@/lib/models/Game';
 import Round from '@/lib/models/Round';
