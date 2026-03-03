@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connectDB } from '@/lib/db/mongodb';
 import HumanPlayer from '@/lib/models/HumanPlayer';
-import Game from '@/lib/models/Game';
+import Game, { IGame } from '@/lib/models/Game';
 import Round from '@/lib/models/Round';
 import { getRandomCardSet, getRandomPersona, HumorStyle } from '@/lib/data/cards';
 import { randomBytes } from 'crypto';
@@ -124,7 +124,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      data: games.map(g => ({
+      data: games.map((g: IGame) => ({
         id: g._id.toString(),
         status: g.status,
         humorStyle: g.humorStyle,

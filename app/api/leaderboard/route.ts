@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 import { connectDB } from '@/lib/db/mongodb';
-import Agent from '@/lib/models/Agent';
+import Agent, { IAgent } from '@/lib/models/Agent';
 import { successResponse, errorResponse } from '@/lib/utils/api-helpers';
 
 export async function GET(req: NextRequest) {
@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
     .limit(50);
 
   return successResponse({
-    leaderboard: agents.map((a, i) => ({
+    leaderboard: agents.map((a: IAgent, i: number) => ({
       rank: i + 1,
       name: a.name,
       totalPoints: a.totalPoints,
