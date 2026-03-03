@@ -359,25 +359,86 @@ export default function GameplayPage() {
   const { game, round, mySubmission, isDealer } = state;
   const myId = playerName; // used for display
 
-  // Game finished
+  // Game finished — KO screen
   if (game.status === 'finished') {
     const isWinner = game.winnerName === playerName;
     return (
       <main style={{ background: '#0D0D0D', minHeight: '100vh', padding: '24px' }}>
-        <style>{`${FONTS} @keyframes fadeUp { from { opacity:0; transform:translateY(16px);} to {opacity:1; transform:translateY(0);} } @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.4;} }`}</style>
+        <style>{`
+          ${FONTS}
+          @keyframes fadeUp { from { opacity:0; transform:translateY(16px);} to {opacity:1; transform:translateY(0);} }
+          @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
+          @keyframes koEntrance { 0% { transform:scale(2.5) rotate(-8deg); opacity:0; } 60% { transform:scale(0.92) rotate(2deg); opacity:1; } 80% { transform:scale(1.04) rotate(-1deg); } 100% { transform:scale(1) rotate(0); } }
+          @keyframes bounce { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-12px); } }
+          @keyframes starPop { 0% { transform:scale(0) rotate(-20deg); opacity:0; } 70% { transform:scale(1.15) rotate(5deg); opacity:1; } 100% { transform:scale(1) rotate(0); opacity:1; } }
+        `}</style>
         <div style={{ maxWidth: '600px', margin: '0 auto', animation: 'fadeUp 0.5s ease' }}>
-          <div style={{ textAlign: 'center', padding: '60px 0 40px' }}>
-            <div style={{ fontSize: '72px', marginBottom: '16px' }}>{isWinner ? '🏆' : '🎮'}</div>
-            <div style={{ fontFamily: 'Bebas Neue, cursive', fontSize: 'clamp(40px, 8vw, 64px)', color: '#F5F0E8', letterSpacing: '0.02em', lineHeight: 1 }}>
-              {isWinner ? 'YOU WIN!' : 'GAME OVER'}
+
+          {/* KO hero card */}
+          <div style={{
+            background: isWinner
+              ? 'linear-gradient(135deg, #1a0000 0%, #2d0000 100%)'
+              : 'linear-gradient(135deg, #0a0a0a 0%, #141414 100%)',
+            border: `3px solid ${isWinner ? '#C0392B' : '#2a2a2a'}`,
+            borderRadius: '24px',
+            padding: '52px 32px 44px',
+            textAlign: 'center',
+            marginBottom: '20px',
+            position: 'relative',
+            overflow: 'hidden',
+          }}>
+            {/* Background watermark */}
+            <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'none', userSelect: 'none', fontSize: '500px', opacity: 0.03, lineHeight: 1 }}>
+              {isWinner ? '🏆' : '💢'}
             </div>
-            <div style={{ color: '#555', fontFamily: 'DM Sans, sans-serif', fontSize: '16px', marginTop: '8px' }}>
-              {isWinner ? 'Congratulations, you played the best cards!' : `${game.winnerName} took the crown this time.`}
+
+            {isWinner ? (
+              <>
+                <div style={{ fontSize: '72px', marginBottom: '12px', animation: 'bounce 1.2s ease infinite', display: 'inline-block' }}>🏆</div>
+                <div style={{
+                  fontFamily: 'Bebas Neue, cursive',
+                  fontSize: 'clamp(64px, 14vw, 108px)',
+                  color: '#D4A017',
+                  letterSpacing: '0.02em',
+                  lineHeight: 0.9,
+                  animation: 'koEntrance 0.6s cubic-bezier(0.22,1,0.36,1) forwards',
+                  textShadow: '0 0 60px rgba(212,160,23,0.45)',
+                }}>
+                  YOU WIN!
+                </div>
+                <div style={{ fontFamily: 'Bebas Neue, cursive', fontSize: '22px', color: '#C0392B', letterSpacing: '0.2em', marginTop: '12px' }}>
+                  K · N · O · C · K · O · U · T
+                </div>
+              </>
+            ) : (
+              <>
+                <div style={{ fontSize: '36px', marginBottom: '8px', animation: 'starPop 0.5s ease forwards', display: 'inline-block' }}>💥 💢 💥</div>
+                <div style={{
+                  fontFamily: 'Bebas Neue, cursive',
+                  fontSize: 'clamp(88px, 18vw, 140px)',
+                  color: '#F5F0E8',
+                  letterSpacing: '0.02em',
+                  lineHeight: 0.85,
+                  animation: 'koEntrance 0.6s cubic-bezier(0.22,1,0.36,1) forwards',
+                  textShadow: '5px 5px 0 #C0392B, 8px 8px 0 #8B0000',
+                }}>
+                  K.O.
+                </div>
+                <div style={{ fontFamily: 'Bebas Neue, cursive', fontSize: '24px', color: '#444', letterSpacing: '0.15em', marginTop: '16px' }}>
+                  GAME OVER
+                </div>
+              </>
+            )}
+
+            <div style={{ color: '#777', fontFamily: 'DM Sans, sans-serif', fontSize: '15px', marginTop: '20px' }}>
+              {isWinner
+                ? 'Congratulations — you played the best cards!'
+                : `${game.winnerName} took the crown this time.`}
             </div>
           </div>
 
-          {/* Scores */}
-          <div style={{ background: '#111', border: '1px solid #222', borderRadius: '20px', padding: '28px', marginBottom: '24px' }}>
+          {/* Final scores */}
+          <div style={{ background: '#111', border: '1px solid #222', borderRadius: '20px', padding: '28px', marginBottom: '16px' }}>
             <div style={{ fontFamily: 'Bebas Neue, cursive', fontSize: '18px', color: '#555', letterSpacing: '0.08em', marginBottom: '16px' }}>FINAL SCORES</div>
             {[...game.playerScores].sort((a, b) => b.points - a.points).map((ps, i) => (
               <div key={ps.agentId} style={{
@@ -394,8 +455,7 @@ export default function GameplayPage() {
                   {i === 0 ? '🥇' : i === 1 ? '🥈' : '🥉'}
                 </div>
                 <div style={{ flex: 1, fontFamily: 'DM Sans, sans-serif', fontSize: '16px', color: '#F5F0E8' }}>
-                  {ps.agentName}
-                  {ps.isBot && ' 🤖'}
+                  {ps.agentName}{ps.isBot && ' 🤖'}
                 </div>
                 <div style={{ fontFamily: 'Bebas Neue, cursive', fontSize: '28px', color: i === 0 ? '#D4A017' : '#555' }}>{ps.points}</div>
               </div>
