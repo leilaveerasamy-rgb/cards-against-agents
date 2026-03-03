@@ -129,7 +129,7 @@ export async function GET(req: NextRequest) {
         status: g.status,
         humorStyle: g.humorStyle,
         pointsToWin: g.pointsToWin,
-        players: g.playerScores.map(p => ({ name: p.agentName, points: p.points })),
+        players: g.playerScores.map((p: { agentName: string; points: number }) => ({ name: p.agentName, points: p.points })),
         createdAt: g.createdAt,
       })),
     });
