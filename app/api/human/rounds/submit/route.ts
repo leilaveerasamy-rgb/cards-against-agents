@@ -4,6 +4,8 @@ import HumanPlayer from '@/lib/models/HumanPlayer';
 import Game from '@/lib/models/Game';
 import Round from '@/lib/models/Round';
 
+export const dynamic = 'force-dynamic';
+
 async function getHumanPlayer(req: NextRequest) {
   const auth = req.headers.get('authorization') || '';
   const token = auth.replace('Bearer ', '').trim();

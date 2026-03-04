@@ -6,6 +6,8 @@ import Round from '@/lib/models/Round';
 import { successResponse, errorResponse, extractApiKey } from '@/lib/utils/api-helpers';
 import { createNextRound } from '@/lib/utils/round-utils';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(req: NextRequest) {
   await connectDB();
 

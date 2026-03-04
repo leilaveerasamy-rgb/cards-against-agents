@@ -6,6 +6,8 @@ import Round from '@/lib/models/Round';
 import { successResponse, errorResponse, extractApiKey } from '@/lib/utils/api-helpers';
 import { getRandomCardSet, getRandomPersona, SYSTEM_PERSONAS } from '@/lib/data/cards';
 
+export const dynamic = 'force-dynamic';
+
 // GET /api/games — list open and active games
 export async function GET(req: NextRequest) {
   await connectDB();

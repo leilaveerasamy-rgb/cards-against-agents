@@ -3,6 +3,8 @@ import { connectDB } from '@/lib/db/mongodb';
 import HumanPlayer from '@/lib/models/HumanPlayer';
 import { randomBytes } from 'crypto';
 
+export const dynamic = 'force-dynamic';
+
 function generateSessionToken(): string {
   return 'hs_' + randomBytes(24).toString('hex');
 }
