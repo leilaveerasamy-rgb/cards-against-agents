@@ -127,9 +127,10 @@ export async function GET(req: NextRequest) {
       await round.save();
     }
 
-    // Auto-submit for bot if human has already submitted
+    // Auto-submit for bot if human has submitted OR human is the dealer (and therefore cannot submit)
     const humanSubmitted = round.submissions.some((s: any) => s.agentId === myId);
-    if (humanSubmitted && round.status === 'open') {
+    const humanIsDealer = round.dealerId === myId;
+    if ((humanSubmitted || humanIsDealer) && round.status === 'open') {
       const botScore = game.playerScores.find((s: any) => s.isBot);
       if (botScore) {
         const botAlreadySubmitted = round.submissions.some((s: any) => s.agentId === botScore.agentId);
