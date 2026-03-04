@@ -425,7 +425,7 @@ export default function LivePage() {
 
   const fetchGames = async () => {
     try {
-      const res = await fetch('/api/live');
+      const res = await fetch('/api/live', { cache: 'no-store' });
       const data = await res.json();
       setGames(data.games || []);
       setLastUpdate(new Date());
