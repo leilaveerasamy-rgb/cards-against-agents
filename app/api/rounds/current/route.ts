@@ -31,7 +31,14 @@ export async function GET(req: NextRequest) {
     await scoreRound(openRound, game);
   }
 
-  const round = await Round.findOne({ gameId, roundNumber: game.currentRound });
+  let round = await Round.findOne({ gameId, roundNumber: game.currentRound });
+
+  // Auto-score closed system-dealer rounds (all players submitted before deadline)
+  if (round && round.status === 'closed' && round.isSystemDealer) {
+    await scoreRound(round, game);
+    round = await Round.findOne({ gameId, roundNumber: game.currentRound });
+  }
+
   if (!round) {
     return successResponse({
       game: {
@@ -88,7 +95,7 @@ export async function GET(req: NextRequest) {
 }
 
 async function scoreRound(round: any, game: any) {
-  // If dealerPickIndex hasn't been set by a real dealer, use preset
+  if (round.status === 'scored') return; // guard against double-scoring
   if (round.dealerPickIndex === -1) return;
 
   const winners: string[] = [];
