@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { connectDB } from '@/lib/db/mongodb';
 import Game from '@/lib/models/Game';
 import Round from '@/lib/models/Round';
+import { Types } from 'mongoose';
 
 export async function GET(req: NextRequest) {
   await connectDB();
@@ -10,11 +11,11 @@ export async function GET(req: NextRequest) {
   // A game is stale if its latest round deadline has passed and the round is not yet scored
   const activeForCleanup = await Game.find({ status: 'active' }).lean();
   for (const g of activeForCleanup) {
-    const latestRound = await Round.findOne({ gameId: g._id.toString() })
+    const latestRound = await Round.findOne({ gameId: (g._id as Types.ObjectId).toString() })
       .sort({ createdAt: -1 })
       .lean() as any;
     if (latestRound && latestRound.status !== 'scored' && new Date(latestRound.deadline) < new Date()) {
-      await Game.findByIdAndUpdate(g._id, { status: 'finished', finishedAt: new Date() });
+      await Game.findByIdAndUpdate(g._id as Types.ObjectId, { status: 'finished', finishedAt: new Date() });
     }
   }
 
