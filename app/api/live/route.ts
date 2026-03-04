@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connectDB } from '@/lib/db/mongodb';
+
+export const dynamic = 'force-dynamic';
 import Game from '@/lib/models/Game';
 import Round from '@/lib/models/Round';
 import { Types } from 'mongoose';

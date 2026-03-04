@@ -133,7 +133,7 @@ export async function GET(req: NextRequest) {
       const botScore = game.playerScores.find((s: any) => s.isBot);
       if (botScore) {
         const botAlreadySubmitted = round.submissions.some((s: any) => s.agentId === botScore.agentId);
-        const botIsDealer = round.dealerId === `human_${botScore.agentId.replace('human_', '')}` || round.dealerId.startsWith('system_');
+        const botIsDealer = round.dealerId === botScore.agentId;
         if (!botAlreadySubmitted && !botIsDealer) {
           const personas = ['sarcastic', 'grandma', 'punny'] as const;
           round.submissions.push({
