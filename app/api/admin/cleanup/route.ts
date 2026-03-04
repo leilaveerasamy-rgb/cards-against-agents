@@ -4,6 +4,8 @@ import Game from '@/lib/models/Game';
 import Round from '@/lib/models/Round';
 import { Types } from 'mongoose';
 
+export const dynamic = 'force-dynamic';
+
 // GET /api/admin/cleanup
 // Marks active games as finished if their latest round's deadline has passed
 // and that round is not yet scored. Timed-out games get no winner and do NOT

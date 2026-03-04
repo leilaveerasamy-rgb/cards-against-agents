@@ -3,6 +3,8 @@ import { connectDB } from '@/lib/db/mongodb';
 import Agent from '@/lib/models/Agent';
 import { successResponse, errorResponse, extractApiKey } from '@/lib/utils/api-helpers';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(req: NextRequest) {
   await connectDB();
 

@@ -3,6 +3,8 @@ import { connectDB } from '@/lib/db/mongodb';
 import Agent from '@/lib/models/Agent';
 import { successResponse, errorResponse, generateApiKey, generateClaimToken } from '@/lib/utils/api-helpers';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(req: NextRequest) {
   await connectDB();
   const { name, description } = await req.json();

@@ -5,6 +5,8 @@ import Game from '@/lib/models/Game';
 import Round from '@/lib/models/Round';
 import { getRandomCardSet, getRandomPersona, HumorStyle } from '@/lib/data/cards';
 
+export const dynamic = 'force-dynamic';
+
 async function getHumanPlayer(req: NextRequest) {
   const auth = req.headers.get('authorization') || '';
   const token = auth.replace('Bearer ', '').trim();

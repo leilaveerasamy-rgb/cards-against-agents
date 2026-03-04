@@ -5,6 +5,8 @@ import Game from '@/lib/models/Game';
 import Round from '@/lib/models/Round';
 import { successResponse, errorResponse, extractApiKey } from '@/lib/utils/api-helpers';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(req: NextRequest) {
   await connectDB();
 
