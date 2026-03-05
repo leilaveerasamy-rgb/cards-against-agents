@@ -422,17 +422,22 @@ export default function LivePage() {
   const [lastUpdate, setLastUpdate] = useState<Date | null>(null);
   const [loading, setLoading] = useState(true);
   const [pulse, setPulse] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const fetchGames = async () => {
     try {
       const res = await fetch('/api/live', { cache: 'no-store' });
+      if (!res.ok) {
+        throw new Error(`Server error: ${res.status}`);
+      }
       const data = await res.json();
       setGames(data.games || []);
+      setError(null);
       setLastUpdate(new Date());
       setPulse(true);
       setTimeout(() => setPulse(false), 500);
-    } catch {
-      // silent fail
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load games');
     } finally {
       setLoading(false);
     }
@@ -499,13 +504,23 @@ export default function LivePage() {
           </div>
         </div>
 
+        {/* Error banner */}
+        {error && !loading && (
+          <div style={{ background: 'rgba(192,57,43,0.08)', border: '1px solid rgba(192,57,43,0.3)', borderRadius: '12px', padding: '14px 20px', marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <span style={{ fontSize: '16px' }}>⚠️</span>
+            <span style={{ fontFamily: 'JetBrains Mono', fontSize: '12px', color: '#C0392B' }}>
+              {error} — retrying every 10s
+            </span>
+          </div>
+        )}
+
         {/* Games list */}
         {loading ? (
           <div style={{ textAlign: 'center', padding: '80px', color: '#333' }}>
             <div style={{ fontSize: '40px', marginBottom: '16px', display: 'inline-block', animation: 'spin 1.5s linear infinite' }}>🃏</div>
             <div style={{ fontFamily: 'Bebas Neue, cursive', fontSize: '22px', letterSpacing: '0.05em' }}>LOADING...</div>
           </div>
-        ) : games.length === 0 ? (
+        ) : games.length === 0 && !error ? (
           <div style={{ background: '#111', border: '1px dashed #1e1e1e', borderRadius: '22px', padding: '80px', textAlign: 'center' }}>
             {/* Empty card table visual */}
             <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', marginBottom: '28px', opacity: 0.3 }}>
